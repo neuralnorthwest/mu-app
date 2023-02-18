@@ -31,6 +31,7 @@
 # test-go: runs the go tests
 # release: releases the project (called from CI)
 # roll-version: rolls the version of the project
+# docker: builds the docker image
 
 .PHONY: check
 check: generate check-license lint test
@@ -99,3 +100,8 @@ release:
 .PHONY: roll-version
 roll-version:
 	@./scripts/roll-version.sh
+
+.PHONY: docker
+docker:
+	@docker build -t mu-app .
+	@docker build --build-arg DEV=1 -t mu-app-dev .
