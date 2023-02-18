@@ -23,7 +23,7 @@ NO_LIC_FILES=$(grep --exclude-dir=.git --exclude-dir=venv --exclude-dir=gen --ex
 IGNORE_FILES=$(cat .licenseignore | sort)
 if [ "$NO_LIC_FILES" != "$IGNORE_FILES" ]; then
     echo "The following files are missing license headers and are not in .licenseignore:" >&2
-    echo "$NO_LIC_FILES" | grep -v -F -f .licenseignore >&2
+    #echo "$NO_LIC_FILES" | grep -v -F -f .licenseignore >&2
     echo "These files are wonky:" >&2
     echo "$NO_LIC_FILES"
     exit 1
