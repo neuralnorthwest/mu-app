@@ -1,7 +1,10 @@
 ./CHANGELOG.md
 ./CODE_OF_CONDUCT.md
 ./CONTRIBUTING.md
+./.github/ISSUE_TEMPLATE/bug_report.md
+./.github/ISSUE_TEMPLATE/feature_request.md
 ./go.sum
 ./.licenseignore
+./mu-app
 ./README.md
 ./SECURITY.md

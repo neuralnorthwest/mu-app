@@ -21,7 +21,7 @@ import (
 
 // setupWorkers sets up the service workers. This is where we start a secondary
 // HTTP server that serves metrics.
-func (s *complete) setupWorkers(workerGroup worker.Group) error {
+func (s *muApp) setupWorkers(workerGroup worker.Group) error {
 	// Create a diagnostics HTTP server.
 	diagnosticsServer, err := http.NewServer(http.WithAddress(":8081"))
 	if err != nil {

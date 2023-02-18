@@ -18,11 +18,11 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/neuralnorthwest/mu/samples/complete"
+	muapp "github.com/neuralnorthwest/mu-app"
 )
 
 func main() {
-	s, err := complete.New("complete")
+	s, err := muapp.New("mu-app")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error: %v\n", err)
 		os.Exit(1)

@@ -90,24 +90,25 @@ jobs:
       - run: |
           scripts/update-wc.sh
           git diff --exit-code
-  # release:
-  #   name: Release
-  #   if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-  #   needs:
-  #     - test
-  #     - lint
-  #     - check-license
-  #     - check-loc
-  #     - detect-version
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #       with:
-  #         fetch-depth: 0
-  #     - uses: bufbuild/buf-setup-action@v1.14.0
-  #       with:
-  #         github_token: ${{ github.token }}
-  #     - run: |
-  #         gh auth login --with-token <<< ${{ secrets.GITHUB_TOKEN }}
-  #         make setup-buf
-  #         make release
+  release:
+    name: Release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - generate
+      - test
+      - lint
+      - check-license
+      - check-loc
+      - detect-version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: bufbuild/buf-setup-action@v1.14.0
+        with:
+          github_token: ${{ github.token }}
+      - run: |
+          gh auth login --with-token <<< ${{ secrets.GITHUB_TOKEN }}
+          make setup-buf
+          make release

@@ -57,7 +57,13 @@ if [ "$version" != "$main_version" ]; then
 fi
 
 # Increment patch version.
-new_version=$(echo "$version" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+#new_version=$(echo "$version" | awk -F. '{$NF = $NF + 1;} 1' | sed 's/ /./g')
+
+# Increment minor version.
+new_version=$(echo "$version" | awk -F. '{$(NF-1) = $(NF-1) + 1;} 1' | sed 's/ /./g')
+
+# Reset patch version.
+new_version=$(echo "$new_version" | awk -F. '{$NF = 0;} 1' | sed 's/ /./g')
 
 # Replace version number in version.go.
 sed -i "s/$version/$new_version/g" version.go

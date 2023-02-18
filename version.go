@@ -14,9 +14,8 @@
 
 package mu_app
 
-// version is the version of mu-app. This matches the version of mu that is
-// used.
-const version = "v0.1.16"
+// version is the version of mu-app.
+const version = "v1.0.0"
 const _ = version
 
 // Version returns the version of mu.

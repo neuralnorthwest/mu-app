@@ -17,7 +17,7 @@ package mu_app
 // preRun is a function that is run before the service is started. This is where
 // we perform any other initialization that we need to do before the service
 // starts.
-func (s *complete) preRun() error {
+func (s *muApp) preRun() error {
 	s.Logger().Infow("pre-run")
 	return nil
 }

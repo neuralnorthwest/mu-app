@@ -16,8 +16,8 @@ package mu_app
 
 import "runtime/debug"
 
-// bugHandler is the complete service bug handler.
-func (s *complete) bugHandler(msg string) {
+// bugHandler is the mu-app service bug handler.
+func (s *muApp) bugHandler(msg string) {
 	stack := string(debug.Stack())
 	s.Logger().Errorw("BUG", "message", msg, "stack", stack)
 	// If development mode is enabled, we also log the bug to the console

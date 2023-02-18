@@ -15,12 +15,12 @@
 // Basic protobuf
 syntax = "proto3";
 
-package complete.v1;
+package muapp.v1;
 
-option go_package = "github.com/neuralnorthwest/mu/samples/complete/proto/gen/go/complete/v1";
+option go_package = "github.com/neuralnorthwest/mu-app/proto/gen/go/muapp/v1";
 
-// CompleteService is the service definition.
-service CompleteService {
+// MuAppService is the service definition.
+service MuAppService {
   // Hello is a simple RPC that returns a greeting.
     rpc Hello (HelloRequest) returns (HelloResponse) {}
 }

@@ -26,7 +26,7 @@ type met struct {
 }
 
 // setup sets up the service metrics.
-func (s *complete) setupMetrics() error {
+func (s *muApp) setupMetrics() error {
 	m, err := metrics.New()
 	if err != nil {
 		return err

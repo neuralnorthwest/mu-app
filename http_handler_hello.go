@@ -17,7 +17,7 @@ package mu_app
 import ht "net/http"
 
 // helloHandler is a HTTP handler that returns the configured message.
-func (s *complete) helloHandler(w ht.ResponseWriter, r *ht.Request) {
+func (s *muApp) helloHandler(w ht.ResponseWriter, r *ht.Request) {
 	// Increment the hello counter.
 	s.metrics.helloCounter.Inc()
 	// Get the configured message.

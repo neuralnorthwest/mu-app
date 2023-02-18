@@ -83,7 +83,7 @@ if grep -q "TODO" <<< "$notes"; then
 fi
 
 # Create the release.
-if ! gh release create "$version" -t "Mu $version" -n "$notes"; then
+if ! gh release create "$version" -t "mu-app $version" -n "$notes"; then
     echo "Failed to create release."
     exit 1
 fi
