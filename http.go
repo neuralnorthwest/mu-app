@@ -26,7 +26,7 @@ const (
 
 // setupHTTP sets up the service HTTP server. This is where we register HTTP
 // handlers.
-func (s *complete) setupHTTP(server *http.Server) error {
+func (s *muApp) setupHTTP(server *http.Server) error {
 	// routes contains the routes and handlers we will register with the HTTP
 	// server.
 	var routes = map[string]ht.Handler{

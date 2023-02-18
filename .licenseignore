@@ -3,5 +3,6 @@
 ./CONTRIBUTING.md
 ./go.sum
 ./.licenseignore
+./mu-app
 ./README.md
 ./SECURITY.md

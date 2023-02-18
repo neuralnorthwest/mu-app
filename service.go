@@ -20,8 +20,8 @@ import (
 	"github.com/neuralnorthwest/mu/service"
 )
 
-// complete is the main struct of the complete service.
-type complete struct {
+// muApp is the main struct of the muApp service.
+type muApp struct {
 	// Embed a Mu service.Service.
 	*service.Service
 	// metrics holds the service metrics.
@@ -32,18 +32,18 @@ type complete struct {
 	config *Config
 }
 
-// New creates a new complete service.
-func New(name string) (*complete, error) {
+// New creates a new mu-app service.
+func New(name string) (*muApp, error) {
 	// First, we initialize the service.Service. This is the core of the
 	// service. It handles the service lifecycle, logging, and configuration.
 	srv, err := service.New(name)
 	if err != nil {
 		return nil, err
 	}
-	// Next, we initialize the complete service. This is the service-specific
+	// Next, we initialize the mu-app service. This is the service-specific
 	// code. We embed the service.Service so that we can access the service
 	// lifecycle, logging, and configuration.
-	s := &complete{
+	s := &muApp{
 		Service: srv,
 	}
 	// Configure a bug handler that will send bug reports to the service

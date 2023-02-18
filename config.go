@@ -27,7 +27,7 @@ type Config struct {
 
 // setupConfig sets up the service configuration. This is where we register
 // configuration variables.
-func (s *complete) setupConfig(c config.Config) error {
+func (s *muApp) setupConfig(c config.Config) error {
 	// Register a configuration variable. The first argument is the name of the
 	// variable. The second argument is the default value. The third argument is
 	// the description of the variable.
