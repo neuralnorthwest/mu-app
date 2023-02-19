@@ -15,7 +15,7 @@
 package mu_app
 
 // version is the version of mu-app.
-const version = "v1.0.0"
+const version = "v1.0.2"
 const _ = version
 
 // Version returns the version of mu.
