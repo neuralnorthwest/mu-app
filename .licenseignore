@@ -7,5 +7,6 @@
 ./go.sum
 ./.licenseignore
 ./mu-app
+./new
 ./README.md
 ./SECURITY.md

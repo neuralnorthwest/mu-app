@@ -12,6 +12,27 @@
 This is a complete sample of all Mu functionality. It is a good starting point
 for a new project based on Mu.
 
+## Creating a new app
+
+To create a new app based on `mu-app`, you can use the following command:
+
+```bash
+go run github.com/neuralnorthwest/mu-app/cmd/new@latest my-app
+```
+
+This takes care of cloning the `mu-app` repository, removing the `.git` folder,
+and renaming all references to `mu-app` to `my-app`.
+
+### Enabling badges
+
+By default, the badges at the top of this `README.md` will be removed. To
+keep them, you need to specify the GitHub owner and repository name that you
+will be pushing to. Do with with the `--target` flag:
+
+```bash
+go run github.com/neuralnorthwest/mu-app/cmd/new@latest my-app --target my-name/my-app
+```
+
 ## Developer quick start
 
 If you want work on `mu-app`, you can use the following commands to get started:
