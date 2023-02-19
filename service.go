@@ -36,7 +36,7 @@ type muApp struct {
 func New(name string) (*muApp, error) {
 	// First, we initialize the service.Service. This is the core of the
 	// service. It handles the service lifecycle, logging, and configuration.
-	srv, err := service.New(name)
+	srv, err := service.New(name, service.WithVersion(version))
 	if err != nil {
 		return nil, err
 	}

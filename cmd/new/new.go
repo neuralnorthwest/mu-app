@@ -99,6 +99,10 @@ func (n *newImpl) run() error {
 	if err := n.processReadme(); err != nil {
 		return fmt.Errorf("unable to process README.md: %w", err)
 	}
+	// process the version.go
+	if err := n.processVersion(); err != nil {
+		return fmt.Errorf("unable to process version.go: %w", err)
+	}
 	return nil
 }
 
@@ -247,6 +251,43 @@ COPY_LOOP:
 		}
 	}
 	outLines = append(outLines, "PLACEHOLDER")
+	// write the file
+	if err := os.WriteFile(path, []byte(strings.Join(outLines, "\n")), 0644); err != nil {
+		return fmt.Errorf("unable to write file %q: %w", path, err)
+	}
+	return nil
+}
+
+// processVersion processes the version.go file.
+func (n *newImpl) processVersion() error {
+	// load the version.go
+	path := filepath.Join(n.Path, "version.go")
+	contents, err := os.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("unable to read file %q: %w", path, err)
+	}
+	// split into lines
+	lines := strings.Split(string(contents), "\n")
+	outLines := []string{}
+	// state machine:
+	// 0: copying lines, have not reached a version
+	// 1: have reached a version and are copying lines
+	state := 0
+	for _, line := range lines {
+		switch state {
+		case 0:
+			// copying lines, have not reached a version
+			if strings.HasPrefix(line, "const version = ") {
+				outLines = append(outLines, "const version = \"v0.0.0\"")
+				state = 1
+			} else {
+				outLines = append(outLines, line)
+			}
+		case 1:
+			// have reached a version and are copying lines
+			outLines = append(outLines, line)
+		}
+	}
 	// write the file
 	if err := os.WriteFile(path, []byte(strings.Join(outLines, "\n")), 0644); err != nil {
 		return fmt.Errorf("unable to write file %q: %w", path, err)
