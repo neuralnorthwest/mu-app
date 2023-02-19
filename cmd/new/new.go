@@ -39,6 +39,8 @@ type newImpl struct {
 	FromRepo string
 	// FromRef is the reference to use from the repository.
 	FromRef string
+	// Target is the GitHub target repository to use, in the form of owner/repo.
+	Target string
 }
 
 // newCommand returns a new command for creating a new project.
@@ -57,6 +59,7 @@ func newCommand() *cobra.Command {
 	cmd.Flags().StringVar(&n.Path, "path", "", "The path to the new project")
 	cmd.Flags().StringVar(&n.FromRepo, "from-repo", "https://github.com/neuralnorthwest/mu-app", "The repository to use as the template")
 	cmd.Flags().StringVar(&n.FromRef, "from-ref", "main", "The reference to use from the repository")
+	cmd.Flags().StringVar(&n.Target, "target", "", "The GitHub target repository to use, in the form of owner/repo")
 	return cmd
 }
 
@@ -80,6 +83,10 @@ func (n *newImpl) run() error {
 	if err := n.cloneRepo(); err != nil {
 		return fmt.Errorf("unable to clone repo: %w", err)
 	}
+	// remove the .git directory
+	if err := os.RemoveAll(filepath.Join(n.Path, ".git")); err != nil {
+		return fmt.Errorf("unable to remove .git directory: %w", err)
+	}
 	// rename the files
 	if err := n.renameFiles(); err != nil {
 		return fmt.Errorf("unable to rename files: %w", err)
@@ -88,9 +95,9 @@ func (n *newImpl) run() error {
 	if err := n.renameContents(); err != nil {
 		return fmt.Errorf("unable to rename contents: %w", err)
 	}
-	// remove the .git directory
-	if err := os.RemoveAll(filepath.Join(n.Path, ".git")); err != nil {
-		return fmt.Errorf("unable to remove .git directory: %w", err)
+	// process the README.md
+	if err := n.processReadme(); err != nil {
+		return fmt.Errorf("unable to process README.md: %w", err)
 	}
 	return nil
 }
@@ -137,9 +144,6 @@ func (n *newImpl) renameFiles() error {
 			return err
 		}
 		base := filepath.Base(path)
-		if base == ".git" {
-			return filepath.SkipDir
-		}
 		if base == "mu-app" || base == "mu_app" || base == "muapp" || base == "muApp" {
 			all = append(all, path)
 		}
@@ -173,10 +177,6 @@ func (n *newImpl) renameContents() error {
 		if err != nil {
 			return err
 		}
-		base := filepath.Base(path)
-		if base == ".git" {
-			return filepath.SkipDir
-		}
 		if d.IsDir() {
 			return nil
 		}
@@ -194,6 +194,62 @@ func (n *newImpl) renameContents() error {
 		return nil
 	}); err != nil {
 		return fmt.Errorf("unable to walk directory %q: %w", n.Path, err)
+	}
+	return nil
+}
+
+// processReadme processes the README.md file.
+func (n *newImpl) processReadme() error {
+	// load the README.md
+	path := filepath.Join(n.Path, "README.md")
+	contents, err := os.ReadFile(path)
+	if err != nil {
+		return fmt.Errorf("unable to read file %q: %w", path, err)
+	}
+	// split into lines
+	lines := strings.Split(string(contents), "\n")
+	outLines := []string{}
+	// state machine:
+	// 0: copying lines, have not reached a badge
+	// 1: have reached a badge and are skipping lines (target is "")
+	// 2: have reached a badge and are copying lines (target is not "")
+	// 3: have passed the badges and are done
+	state := 0
+COPY_LOOP:
+	for _, line := range lines {
+		switch state {
+		case 0:
+			// copying lines, have not reached a badge
+			if strings.HasPrefix(line, "![") && n.Target == "" {
+				state = 1
+			} else if strings.HasPrefix(line, "![") && n.Target != "" {
+				outLines = append(outLines, strings.ReplaceAll(line, "neuralnorthwest/mu-app", n.Target))
+				state = 2
+			} else {
+				outLines = append(outLines, line)
+			}
+		case 1:
+			// have reached a badge and are skipping lines (target is "")
+			if !strings.HasPrefix(line, "![") {
+				state = 3
+			}
+		case 2:
+			// have reached a badge and are copying lines (target is not "")
+			if !strings.HasPrefix(line, "![") {
+				outLines = append(outLines, "")
+				state = 3
+			} else {
+				outLines = append(outLines, strings.ReplaceAll(line, "neuralnorthwest/mu-app", n.Target))
+			}
+		case 3:
+			// have passed the badges and are done
+			break COPY_LOOP
+		}
+	}
+	outLines = append(outLines, "PLACEHOLDER")
+	// write the file
+	if err := os.WriteFile(path, []byte(strings.Join(outLines, "\n")), 0644); err != nil {
+		return fmt.Errorf("unable to write file %q: %w", path, err)
 	}
 	return nil
 }
