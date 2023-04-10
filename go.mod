@@ -18,7 +18,7 @@ go 1.19
 
 require (
 	github.com/neuralnorthwest/mu v0.1.16
-	github.com/spf13/cobra v1.6.1
+	github.com/spf13/cobra v1.7.0
 	golang.org/x/mod v0.8.0
 	golang.org/x/text v0.7.0
 	google.golang.org/grpc v1.53.0
